@@ -1,3 +1,8 @@
+SELECT PRODUCTION_COMPANY.NAME
+, COUNT(FILM_COMPANY.FILM_ID) AS NUMBER_OF_FILMS
+FROM PRODUCTION_COMPANY LEFT JOIN FILM_COMPANY ON PRODUCTION_COMPANY.COMPANY_ID = FILM_COMPANY.COMPANY_ID
+GROUP BY PRODUCTION_COMPANY.NAME, PRODUCTION_COMPANY.COMPANY_ID
+ORDER BY NUMBER_OF_FILMS DESC;
 
 --Запит 1
 
@@ -19,25 +24,56 @@ order by number_of_genres desc;
 
 --Запит 3
 
-set serveroutput on
-declare 
-cursor film_cursor is (select original_title, release_date from film);
-v_month VARCHAR2(30);
-begin
-    for record in film_cursor
-        loop
-            v_month := extract(month from record.release_date);
-            if v_month in ('12', '1', '2')
-            then
-                DBMS_OUTPUT.PUT_LINE (record.original_title || ': Winter ' || EXTRACT(year from record.release_date));
-            ELSIF v_month in ('3', '4', '5')
-            then 
-                DBMS_OUTPUT.PUT_LINE (record.original_title || ': Spring ' || EXTRACT(year from record.release_date));
-            ELSIF v_month in ('6', '7', '8')
-            then 
-                DBMS_OUTPUT.PUT_LINE (record.original_title || ': Summer ' || EXTRACT(year from record.release_date));
-            ELSE 
-                DBMS_OUTPUT.PUT_LINE (record.original_title || ': Autumn ' || EXTRACT(year from record.release_date));
-            END IF;
-        end loop;
-end;
+select sum(amount)
+, 'summer' as time 
+, film_year
+from(
+select count(original_title) as amount 
+,extract(month from release_date) as film_month
+,extract(year from release_date) as film_year
+from film
+group by extract(year from release_date), extract(month from release_date))
+where film_month in ('6', '7', '8')
+group by film_year
+
+union
+
+select sum(amount)
+, 'Winter' as time
+,film_year
+from(
+select count(original_title) as amount 
+,extract(month from release_date) as film_month
+,extract(year from release_date) as film_year
+from film
+group by extract(year from release_date), extract(month from release_date))
+where film_month in ('12', '1', '2')
+group by film_year
+
+union
+
+select sum(amount)
+, 'spring' as time
+, film_year
+from(
+select count(original_title) as amount 
+,extract(month from release_date) as film_month
+,extract(year from release_date) as film_year
+from film
+group by extract(year from release_date), extract(month from release_date))
+where film_month in ('3', '4', '5')
+group by film_year
+
+union
+
+select sum(amount)
+, 'autumn' as time
+, film_year
+from(
+select count(original_title) as amount 
+,extract(month from release_date) as film_month
+,extract(year from release_date) as film_year
+from film
+group by extract(year from release_date), extract(month from release_date))
+where film_month in ('9', '10', '11')
+group by film_year;
