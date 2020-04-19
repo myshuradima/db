@@ -1,10 +1,6 @@
-SELECT PRODUCTION_COMPANY.NAME
-, COUNT(FILM_COMPANY.FILM_ID) AS NUMBER_OF_FILMS
-FROM PRODUCTION_COMPANY LEFT JOIN FILM_COMPANY ON PRODUCTION_COMPANY.COMPANY_ID = FILM_COMPANY.COMPANY_ID
-GROUP BY PRODUCTION_COMPANY.NAME, PRODUCTION_COMPANY.COMPANY_ID
-ORDER BY NUMBER_OF_FILMS DESC;
 
---Запит 1
+
+--Г‡Г ГЇГЁГІ 1
 
 select production_company.name
 , count(film_company.film_id)as number_of_films
@@ -12,7 +8,7 @@ from production_company left join film_company on production_company.company_id 
 group by production_company.name, production_company.company_id
 order by number_of_films DESC;
 
---Запит 2
+--Г‡Г ГЇГЁГІ 2
 
 select genres.name
 , count(film_genre.film_id) as number_of_genres
@@ -22,7 +18,7 @@ group by genres.name, genres.genre_id
 order by number_of_genres desc;
 
 
---Запит 3
+--Г‡Г ГЇГЁГІ 3
 
 select sum(amount)
 , 'summer' as time 
