@@ -36,10 +36,9 @@ company = []
 films_amount = []
 
 for row in cursor:
-    print("Customer name: ", row[1], " and his order sum: ", row[0])
-    if int(row[1]) > 50:
-        company += [row[0]]
-        films_amount += [row[1]]
+    print("Amount of films ", row[1], " company name: ", row[0])
+    company += [row[0]]
+    films_amount += [row[1]]
 
 data = [go.Bar(
         x=company,
